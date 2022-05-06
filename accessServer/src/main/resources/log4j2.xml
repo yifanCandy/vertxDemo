@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Configuration monitorInterval="30">
+    <Properties>
+        <property name="LOG_HOME">./logs</property>
+        <property name="pattern_layout">%-d{yyyy-MM-dd HH:mm:ss.SSS}|%p|%X{IP}|%enc{%X{traceId}}|%t|%F:%L|%m%n</property>
+    </Properties>
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT" follow="true">
+            <PatternLayout pattern="${pattern_layout}"/>
+        </Console>
+        <RollingRandomAccessFile name="file" fileName="${LOG_HOME}/run/voiceServices_run.log"
+                                                       filePattern="${LOG_HOME}/run/voiceServices_run-%d{yyyy-MM-dd}-%i.log" filePermissions="rw-------">
+        <PatternLayout pattern="${pattern_layout}" />
+        <Policies>
+            <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+            <SizeBasedTriggeringPolicy size="50M" />
+        </Policies>
+        <DefaultRolloverStrategy max="5">
+            <Delete basePath="${LOG_HOME}/run" maxDepth="1">
+                <IfFileName glob="voiceServices_run-*.log" />
+                <IfLastModified age="3d" />
+            </Delete>
+        </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+        <RollingRandomAccessFile name="interfaceFile" fileName="${LOG_HOME}/interface/voiceServices_interface.log"
+                                 filePattern="${LOG_HOME}/interface/voiceServices_interface-%d{yyyy-MM-dd}-%i.log" filePermissions="rw-------">
+            <PatternLayout pattern="%d{yyyy-MM-dd HH:mm:ss.SSS}|%m%n" />
+            <Policies>
+                <TimeBasedTriggeringPolicy interval="1" modulate="true"/>
+                <SizeBasedTriggeringPolicy size="50M" />
+            </Policies>
+            <DefaultRolloverStrategy max="5">
+                <Delete basePath="${LOG_HOME}/interface" maxDepth="1">
+                    <IfFileName glob="voiceServices_interface-*.log" />
+                    <IfLastModified age="3d" />
+                </Delete>
+            </DefaultRolloverStrategy>
+        </RollingRandomAccessFile>
+
+    </Appenders>
+    <Loggers>
+        <AsyncRoot level="info">
+            <AppenderRef ref="file"/>
+            <AppenderRef ref="Console"/>
+        </AsyncRoot>
+        <AsyncLogger additivity="false" level="INFO" name="InterfaceLog">
+            <AppenderRef ref="interfaceFile"/>
+        </AsyncLogger>
+    </Loggers>
+</Configuration>

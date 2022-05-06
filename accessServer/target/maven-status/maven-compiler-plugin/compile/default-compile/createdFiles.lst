@@ -1,0 +1,4 @@
+com\tgl\access\AccessServicesMain.class
+com\tgl\access\server\VertxServerStart.class
+com\tgl\access\configuration\ServerConfiguration.class
+com\tgl\access\server\VertxHttpServer.class
